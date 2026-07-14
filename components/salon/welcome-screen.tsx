@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight, Hexagon, Sparkles } from 'lucide-react'
+import { ArrowRight, FileText, Hexagon, Sparkles } from 'lucide-react'
 
 export function WelcomeScreen({
   onNormal,
@@ -65,6 +65,29 @@ export function WelcomeScreen({
               aria-hidden="true"
             />
           </button>
+
+          <a
+            href="/propuesta-30x-deck.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex w-full items-center justify-between gap-3 rounded-lg border border-dashed border-border px-5 py-3.5 text-left transition-colors hover:border-muted-foreground/40"
+          >
+            <span className="flex items-center gap-2">
+              <FileText className="size-4 text-muted-foreground" aria-hidden="true" />
+              <span className="text-sm font-bold text-foreground">
+                Ver propuesta en diapositivas
+              </span>
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="rounded border border-border bg-secondary px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-muted-foreground">
+                PDF
+              </span>
+              <ArrowRight
+                className="size-3.5 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
+            </span>
+          </a>
         </div>
       </div>
     </div>

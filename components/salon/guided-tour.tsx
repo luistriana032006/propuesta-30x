@@ -36,6 +36,11 @@ const STEPS: TourStep[] = [
     text: 'Con "+ Nuevo flujo" completas un brief corto, eliges plataforma y programa, y la IA genera un copy editable directo en "En creación". De ahí pasa por el candado de aprobación y, ya "Aprobado", el botón "Publicar" simula la llamada final: la pieza queda "Publicada" con fecha y métricas de ejemplo.',
   },
   {
+    target: '[data-tour="triggers-tab"]',
+    title: 'Disparadores: la automatización detrás de la escala',
+    text: 'Cada disparador es una regla: "al aprobar un Instagram, genera la variante de LinkedIn", "al aprobar contenido de un programa, genera variantes A/B", "cada lunes, genera borradores de la semana". Cuando se cumple la condición, el sistema crea solo la pieza nueva en "En creación" — así 30X produce contenido a escala sin escalar el equipo en la misma proporción.',
+  },
+  {
     target: '[data-tour="filters"]',
     title: 'Filtros y nuevos flujos',
     text: 'Filtra por plataforma, programa o etapa para ver solo lo tuyo. Y con "+ Nuevo flujo" arrancas una pieza desde cero.',

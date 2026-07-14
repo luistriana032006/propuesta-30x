@@ -21,8 +21,8 @@ export function WelcomeScreen({
             30X · media ops
           </p>
           <p className="max-w-sm text-sm leading-relaxed text-muted-foreground text-pretty">
-            Un solo lugar para crear, revisar, aprobar y publicar el contenido
-            de 30X — con humanos siempre al mando.
+            El motor de automatización detrás de la producción de contenido
+            masivo de 30X — con humanos siempre al mando.
           </p>
         </div>
 
@@ -38,7 +38,7 @@ export function WelcomeScreen({
                 Pincha acá si eres de 30X
               </span>
               <span className="font-mono text-[10px] uppercase tracking-wider text-primary-foreground/70">
-                Recorrido guiado · 6 pasos · 1 min
+                Recorrido guiado · 7 pasos · 1 min
               </span>
             </span>
             <ArrowRight

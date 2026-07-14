@@ -38,3 +38,13 @@ export function generateMockMetrics() {
     engagement: Number((2 + Math.random() * 9).toFixed(1)),
   }
 }
+
+export function generateVariantCopy(
+  sourceTitle: string,
+  kind: 'platform-variant' | 'ab-variants',
+): string {
+  if (kind === 'platform-variant') {
+    return `Adaptación para LinkedIn de "${sourceTitle}": mismo mensaje central, tono más profesional y CTA orientado a decisión de negocio.`
+  }
+  return `Variante A/B de "${sourceTitle}": mismo mensaje central, ángulo de apertura distinto para testear cuál convierte mejor.`
+}

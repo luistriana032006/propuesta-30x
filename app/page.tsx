@@ -8,9 +8,11 @@ import type {
   Program,
   Stage,
 } from '@/lib/content-data'
-import { CONTENT_PIECES, STAGES } from '@/lib/content-data'
+import { APPROVERS, CONTENT_PIECES, STAGES, nextPieceId } from '@/lib/content-data'
+import { AI_MODEL_LABEL, generateMockMetrics } from '@/lib/mock-ai'
 import { GuidedTour } from '@/components/salon/guided-tour'
 import { KanbanColumn } from '@/components/salon/kanban-column'
+import { NewFlowModal } from '@/components/salon/new-flow-modal'
 import { TopBar } from '@/components/salon/top-bar'
 import { VersionPanel } from '@/components/salon/version-panel'
 import { WelcomeScreen } from '@/components/salon/welcome-screen'
@@ -28,6 +30,7 @@ export default function SalonDeContenido() {
   const [programFilter, setProgramFilter] = useState<Program | null>(null)
   const [stageFilter, setStageFilter] = useState<Stage | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [newFlowOpen, setNewFlowOpen] = useState(false)
 
   const filtered = useMemo(
     () =>
@@ -70,12 +73,64 @@ export default function SalonDeContenido() {
               ...(next === 'publicado'
                 ? {
                     publishedAt: new Date().toISOString(),
-                    metrics: p.metrics ?? { impressions: 0, engagement: 0 },
+                    metrics: p.metrics ?? generateMockMetrics(),
                   }
                 : {}),
             }
           : p,
       ),
+    )
+  }
+
+  function handleCreateFlow(input: {
+    brief: string
+    platform: Platform
+    program: Program
+    copy: string
+  }) {
+    const id = nextPieceId(pieces)
+    const now = new Date()
+    const approver = APPROVERS[Math.floor(Math.random() * APPROVERS.length)]
+    const title =
+      input.brief.length > 64 ? `${input.brief.slice(0, 61)}...` : input.brief
+
+    const newPiece: ContentPiece = {
+      id,
+      title,
+      stage: 'creacion',
+      platform: input.platform,
+      assetType: 'copy',
+      program: input.program,
+      copyPreview: input.copy,
+      generatedBy: AI_MODEL_LABEL,
+      approver,
+      createdAt: now.toISOString(),
+      customFields: [
+        { id: `f${Date.now()}`, label: 'Brief', value: input.brief },
+      ],
+      versions: [
+        {
+          id: 'v1',
+          label: 'v1 — generado por IA',
+          timestamp: now.toLocaleString('es-MX', {
+            day: '2-digit',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+          author: AI_MODEL_LABEL,
+          note: 'Copy generado automáticamente a partir del brief. Pendiente de edición y revisión humana.',
+        },
+      ],
+    }
+
+    setPieces((prev) => [newPiece, ...prev])
+    setNewFlowOpen(false)
+  }
+
+  function handleEditCopy(pieceId: string, copy: string) {
+    setPieces((prev) =>
+      prev.map((p) => (p.id === pieceId ? { ...p, copyPreview: copy } : p)),
     )
   }
 
@@ -117,6 +172,7 @@ export default function SalonDeContenido() {
         onPlatformFilter={setPlatformFilter}
         onProgramFilter={setProgramFilter}
         onStageFilter={setStageFilter}
+        onNewFlow={() => setNewFlowOpen(true)}
       />
 
       <main className="flex-1 p-4 md:p-6">
@@ -132,6 +188,7 @@ export default function SalonDeContenido() {
               onSelect={(p) => setSelectedId(p.id)}
               onTrigger={handleTrigger}
               onAddField={handleAddField}
+              onEditCopy={handleEditCopy}
             />
           ))}
         </div>
@@ -139,6 +196,13 @@ export default function SalonDeContenido() {
 
       {selected && (
         <VersionPanel piece={selected} onClose={() => setSelectedId(null)} />
+      )}
+
+      {newFlowOpen && (
+        <NewFlowModal
+          onClose={() => setNewFlowOpen(false)}
+          onCreate={handleCreateFlow}
+        />
       )}
 
       {tourActive && <GuidedTour onFinish={() => setTourActive(false)} />}

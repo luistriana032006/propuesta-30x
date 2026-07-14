@@ -36,12 +36,14 @@ export function KanbanColumn({
   onSelect,
   onTrigger,
   onAddField,
+  onEditCopy,
 }: {
   stage: Stage
   pieces: ContentPiece[]
   onSelect: (piece: ContentPiece) => void
   onTrigger: (piece: ContentPiece) => void
   onAddField: (pieceId: string, field: Omit<CustomField, 'id'>) => void
+  onEditCopy: (pieceId: string, copy: string) => void
 }) {
   const meta = STAGE_META[stage]
 
@@ -70,6 +72,7 @@ export function KanbanColumn({
             onSelect={onSelect}
             onTrigger={onTrigger}
             onAddField={onAddField}
+            onEditCopy={onEditCopy}
           />
         ))}
         {pieces.length === 0 && (

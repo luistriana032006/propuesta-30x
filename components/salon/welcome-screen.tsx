@@ -38,7 +38,7 @@ export function WelcomeScreen({
                 Pincha acá si eres de 30X
               </span>
               <span className="font-mono text-[10px] uppercase tracking-wider text-primary-foreground/70">
-                Recorrido guiado · 5 pasos · 1 min
+                Recorrido guiado · 6 pasos · 1 min
               </span>
             </span>
             <ArrowRight

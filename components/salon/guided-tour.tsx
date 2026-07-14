@@ -31,6 +31,11 @@ const STEPS: TourStep[] = [
     text: 'Este botón lanza el siguiente paso del flujo. Solo se enciende cuando la pieza ya fue aprobada — antes, está bloqueado.',
   },
   {
+    target: '[data-tour="new-flow"]',
+    title: 'De cero a publicado',
+    text: 'Con "+ Nuevo flujo" completas un brief corto, eliges plataforma y programa, y la IA genera un copy editable directo en "En creación". De ahí pasa por el candado de aprobación y, ya "Aprobado", el botón "Publicar" simula la llamada final: la pieza queda "Publicada" con fecha y métricas de ejemplo.',
+  },
+  {
     target: '[data-tour="filters"]',
     title: 'Filtros y nuevos flujos',
     text: 'Filtra por plataforma, programa o etapa para ver solo lo tuyo. Y con "+ Nuevo flujo" arrancas una pieza desde cero.',

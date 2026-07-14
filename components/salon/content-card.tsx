@@ -8,13 +8,16 @@ import {
   Bot,
   Check,
   FileText,
+  Loader2,
   Lock,
+  Pencil,
   Plus,
   UserCheck,
   X,
 } from 'lucide-react'
 import type { ContentPiece, CustomField } from '@/lib/content-data'
 import { PLATFORM_LABELS, SUGGESTED_FIELDS } from '@/lib/content-data'
+import { META_API_LABEL } from '@/lib/mock-ai'
 import { PlatformIcon } from './platform-icon'
 
 const ASSET_LABELS: Record<ContentPiece['assetType'], string> = {
@@ -131,16 +134,41 @@ export function ContentCard({
   onSelect,
   onTrigger,
   onAddField,
+  onEditCopy,
 }: {
   piece: ContentPiece
   onSelect: (piece: ContentPiece) => void
   onTrigger: (piece: ContentPiece) => void
   onAddField: (pieceId: string, field: Omit<CustomField, 'id'>) => void
+  onEditCopy: (pieceId: string, copy: string) => void
 }) {
   const [addingField, setAddingField] = useState(false)
+  const [editingCopy, setEditingCopy] = useState(false)
+  const [copyDraft, setCopyDraft] = useState(piece.copyPreview)
+  const [publishing, setPublishing] = useState(false)
   const isLocked = piece.stage === 'revision'
   const isDone = piece.stage === 'publicado'
   const triggerEnabled = piece.stage === 'creacion' || piece.stage === 'aprobado'
+
+  function handleTriggerClick() {
+    if (piece.stage === 'aprobado') {
+      setPublishing(true)
+      setTimeout(
+        () => {
+          onTrigger(piece)
+        },
+        1200 + Math.random() * 700,
+      )
+    } else {
+      onTrigger(piece)
+    }
+  }
+
+  function saveCopy() {
+    if (!copyDraft.trim()) return
+    onEditCopy(piece.id, copyDraft.trim())
+    setEditingCopy(false)
+  }
 
   return (
     <article
@@ -280,15 +308,75 @@ export function ContentCard({
         )}
       </div>
 
+      {piece.stage === 'creacion' && (
+        <div className="border-t border-border px-3.5 py-2.5">
+          {editingCopy ? (
+            <div className="flex flex-col gap-2">
+              <textarea
+                value={copyDraft}
+                onChange={(e) => setCopyDraft(e.target.value)}
+                rows={3}
+                aria-label="Editar copy generado"
+                className="resize-none rounded border border-primary/40 bg-background px-2 py-1.5 font-mono text-[11px] leading-relaxed text-foreground focus:border-primary focus:outline-none"
+              />
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={saveCopy}
+                  disabled={!copyDraft.trim()}
+                  className="flex items-center gap-1 rounded bg-primary px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <Check className="size-3" aria-hidden="true" />
+                  Guardar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCopyDraft(piece.copyPreview)
+                    setEditingCopy(false)
+                  }}
+                  className="flex items-center gap-1 rounded border border-border px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setCopyDraft(piece.copyPreview)
+                setEditingCopy(true)
+              }}
+              className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary"
+            >
+              <Pencil className="size-3" aria-hidden="true" />
+              Editar copy
+            </button>
+          )}
+        </div>
+      )}
+
       {!isDone && (
         <div className="px-3.5 pb-3.5 pt-1">
+          {publishing ? (
+            <div className="flex flex-col items-center gap-1.5 rounded-md border border-dashed border-border px-3 py-2.5">
+              <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-primary">
+                <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+                Publicando…
+              </span>
+              <span className="font-mono text-[10px] text-muted-foreground">
+                Simulación — {META_API_LABEL}
+              </span>
+            </div>
+          ) : (
           <button
             type="button"
             data-tour={
               piece.stage === 'aprobado' ? 'trigger' : undefined
             }
             disabled={!triggerEnabled}
-            onClick={() => onTrigger(piece)}
+            onClick={handleTriggerClick}
             className={`flex w-full items-center justify-center gap-2 rounded-md px-3 py-2 font-mono text-[11px] font-medium uppercase tracking-wider transition-colors ${
               triggerEnabled
                 ? 'bg-primary text-primary-foreground hover:bg-primary/90'
@@ -307,6 +395,7 @@ export function ContentCard({
               </>
             )}
           </button>
+          )}
         </div>
       )}
     </article>

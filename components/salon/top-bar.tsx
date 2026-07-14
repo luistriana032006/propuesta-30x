@@ -15,6 +15,7 @@ export function TopBar({
   onPlatformFilter,
   onProgramFilter,
   onStageFilter,
+  onNewFlow,
 }: {
   platformFilter: Platform | null
   programFilter: Program | null
@@ -23,6 +24,7 @@ export function TopBar({
   onPlatformFilter: (p: Platform | null) => void
   onProgramFilter: (p: Program | null) => void
   onStageFilter: (s: Stage | null) => void
+  onNewFlow: () => void
 }) {
   return (
     <header
@@ -130,6 +132,8 @@ export function TopBar({
 
         <button
           type="button"
+          data-tour="new-flow"
+          onClick={onNewFlow}
           className="flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-2 text-xs font-bold text-primary-foreground transition-colors hover:bg-primary/90"
         >
           <Plus className="size-3.5" aria-hidden="true" />

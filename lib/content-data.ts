@@ -52,6 +52,16 @@ export const PLATFORM_LABELS: Record<Platform, string> = {
 
 export const PROGRAMS: Program[] = ['Sales', 'Growth', 'AI', 'VC', 'Inmersión']
 
+export const APPROVERS = ['Valentina M.', 'Ricardo T.'] as const
+
+export function nextPieceId(pieces: ContentPiece[]): string {
+  const max = pieces.reduce((m, p) => {
+    const n = Number(p.id.replace('PZ-', ''))
+    return Number.isFinite(n) ? Math.max(m, n) : m
+  }, 0)
+  return `PZ-${String(max + 1).padStart(4, '0')}`
+}
+
 export const SUGGESTED_FIELDS = [
   'Mentor / founder',
   'Tipo de formato',

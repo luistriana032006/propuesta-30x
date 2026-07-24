@@ -35,7 +35,7 @@ export function WelcomeScreen({
             <span className="flex flex-col gap-0.5">
               <span className="flex items-center gap-2 text-sm font-bold text-primary-foreground">
                 <Sparkles className="size-4" aria-hidden="true" />
-                Pincha acá si eres de 30X
+                Ve la explicación de la página en vivo aquí
               </span>
               <span className="font-mono text-[10px] uppercase tracking-wider text-primary-foreground/70">
                 Recorrido guiado · 7 pasos · 1 min
